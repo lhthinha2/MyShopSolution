@@ -1,11 +1,11 @@
-﻿using MyShopSolution.Application.CommonDtos;
+﻿using MyShopSolution.ViewModel.Common;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MyShopSolution.Application.Catalogs.Products.Dtos.Manage
+namespace MyShopSolution.ViewModel.Catalogs.Products
 {
-    public class GetProductPagingRequest : PagingRequestBase
+    public class GetManageProductPagingRequest : PagingRequestBase
     {
         public string Keyword { get; set; }
         public List<int> CategoryId { get; set; }

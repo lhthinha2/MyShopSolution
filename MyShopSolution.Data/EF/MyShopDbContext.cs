@@ -72,5 +72,7 @@ namespace MyShopSolution.Data.EF
         public DbSet<Promotion> Promotions { get; set; }
 
         public DbSet<Transaction> Transactions { get; set; }
+
+        public DbSet<ProductImge> ProductImges { get; set; }
     }
 }

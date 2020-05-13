@@ -1,13 +1,12 @@
-﻿using MyShopSolution.Application.Catalogs.Products.Dtos;
-using MyShopSolution.Application.Catalogs.Products.Dtos.Public;
-using MyShopSolution.Application.CommonDtos;
-using MyShopSolution.Data.EF;
+﻿using MyShopSolution.Data.EF;
 using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using MyShopSolution.ViewModel.Catalogs.Products;
+using MyShopSolution.ViewModel.Common;
 
 namespace MyShopSolution.Application.Catalogs.Products
 {
@@ -20,7 +19,7 @@ namespace MyShopSolution.Application.Catalogs.Products
             _context = context;
         }
 
-        public async Task<PagedResult<ProductViewModel>> GetAllByCategoryId(GetProductPagingRequest request)
+        public async Task<PagedResult<ProductViewModel>> GetAllByCategoryId(GetPublicProductPagingRequest request)
         {
             //1. select join
             var query = from p in _context.Products

@@ -1,6 +1,5 @@
-﻿using MyShopSolution.Application.Catalogs.Products.Dtos;
-using MyShopSolution.Application.Catalogs.Products.Dtos.Public;
-using MyShopSolution.Application.CommonDtos;
+﻿using MyShopSolution.ViewModel.Catalogs.Products;
+using MyShopSolution.ViewModel.Common;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,6 +9,6 @@ namespace MyShopSolution.Application.Catalogs.Products
 {
     public interface IPublicProductService
     {
-        Task<PagedResult<ProductViewModel>> GetAllByCategoryId(GetProductPagingRequest request);
+        Task<PagedResult<ProductViewModel>> GetAllByCategoryId(GetPublicProductPagingRequest request);
     }
 }

@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MyShopSolution.Data.Entities
+namespace MyShopSolution.ViewModel.Catalogs.Products
 {
-    public class ProductImge
+    public class ProductImageViewModel
     {
         public int Id { get; set; }
-
-        public int ProductId { get; set; }
 
         public string ImagePath { get; set; }
 
@@ -21,7 +19,5 @@ namespace MyShopSolution.Data.Entities
         public int SortOrder { get; set; }
 
         public long FileSize { get; set; }
-
-        public Product Product { get; set; }
     }
 }
