@@ -23,7 +23,9 @@ namespace MyShopSolution.Application.Catalogs.Products
         Task AddViewCount(int productId);
         
         Task<PagedResult<ProductViewModel>> GetAllPaging(GetManageProductPagingRequest request);
-        
+
+        Task<ProductViewModel> GetById(int productId, string laguageId);
+
         Task<int> AddImage(int productId, List<IFormFile> files);
         
         Task<int> RemoveImage(int imageId);

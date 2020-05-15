@@ -74,7 +74,8 @@ namespace MyShopSolution.Application.Catalogs.Products
                 };
             }
             _context.Products.Add(product);
-            return await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
+            return product.Id;
         }
 
         public async Task<int> Delete(int productId)
@@ -82,14 +83,14 @@ namespace MyShopSolution.Application.Catalogs.Products
             var product = await _context.Products.FindAsync(productId);
             if (product == null) throw new MyShopException($"Cannot find a product: {productId}");
 
-            var images = _context.ProductImges.Where(i =>i.ProductId == productId);
-            foreach(var image in images)
+            var images = _context.ProductImges.Where(i => i.ProductId == productId);
+            foreach (var image in images)
             {
                 await _storageService.DeleteFileAsync(image.ImagePath);
             }
 
             _context.Products.Remove(product);
-            
+
             return await _context.SaveChangesAsync();
         }
 
@@ -202,7 +203,7 @@ namespace MyShopSolution.Application.Catalogs.Products
 
         public async Task<int> RemoveImage(int imageId)
         {
-            var image =await _context.ProductImges.FindAsync(imageId);
+            var image = await _context.ProductImges.FindAsync(imageId);
             if (image == null) throw new MyShopException($"Cannot find a product: {imageId}");
 
             await _storageService.DeleteFileAsync(image.ImagePath);
@@ -226,6 +227,28 @@ namespace MyShopSolution.Application.Catalogs.Products
         public Task<List<ProductImageViewModel>> GetListImages(int productId)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<ProductViewModel> GetById(int productId, string laguageId)
+        {
+            var product = await _context.Products.FindAsync(productId);
+            var productTranslation = await _context.ProductTranslations.FirstOrDefaultAsync(x => x.ProductId == product.Id && x.LanguageId == laguageId);
+            return new ProductViewModel()
+            {
+                Id = product.Id,
+                DateCreated = product.DateCreated,
+                Description = productTranslation != null ? productTranslation.Description : null,
+                LanguageId = productTranslation.LanguageId,
+                Details = productTranslation != null ? productTranslation.Details : null,
+                Name = productTranslation != null ? productTranslation.Name : null,
+                OriginalPrice = product.OriginalPrice,
+                Price = product.Price,
+                SeoAlias = productTranslation != null ? productTranslation.SeoAlias : null,
+                SeoDescription = productTranslation != null ? productTranslation.SeoDescription : null,
+                SeoTitle = productTranslation != null ? productTranslation.SeoTitle : null,
+                Stock = product.Stock,
+                ViewCount = product.ViewCount
+            };
         }
     }
 }
