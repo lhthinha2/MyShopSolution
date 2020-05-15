@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using MyShopSolution.ViewModel.Catalogs.ProductImages;
 using MyShopSolution.ViewModel.Catalogs.Products;
 using MyShopSolution.ViewModel.Common;
 using System;
