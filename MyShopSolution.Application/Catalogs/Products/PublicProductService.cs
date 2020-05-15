@@ -19,24 +19,24 @@ namespace MyShopSolution.Application.Catalogs.Products
             _context = context;
         }
 
-        public async Task<PagedResult<ProductViewModel>> GetAllByCategoryId(GetPublicProductPagingRequest request)
+        public async Task<PagedResult<ProductViewModel>> GetAllByCategoryId(string languageId, GetPublicProductPagingRequest request)
         {
-            //1. select join
+            //1. Select join
             var query = from p in _context.Products
                         join pt in _context.ProductTranslations on p.Id equals pt.ProductId
                         join pic in _context.ProductInCategories on p.Id equals pic.ProductId
                         join c in _context.Categories on pic.CategoryId equals c.Id
-                        where pt.LanguageId == request.languageId
+                        where pt.LanguageId == languageId
                         select new { p, pt, pic };
-
             //2. filter
-            if (request.CategoryId.HasValue && request.CategoryId > 0)
+            if (request.CategoryId.HasValue && request.CategoryId.Value > 0)
+            {
                 query = query.Where(p => p.pic.CategoryId == request.CategoryId);
-
+            }
             //3. Paging
             int totalRow = await query.CountAsync();
 
-            var data = await query.Skip((request.PageIndex - 1) + request.PageSize)
+            var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
                 .Take(request.PageSize)
                 .Select(x => new ProductViewModel()
                 {
@@ -53,17 +53,15 @@ namespace MyShopSolution.Application.Catalogs.Products
                     SeoTitle = x.pt.SeoTitle,
                     Stock = x.p.Stock,
                     ViewCount = x.p.ViewCount
-                }
-                ).ToListAsync();
+                }).ToListAsync();
 
-            //4. select and projection
-            var pagedRusult = new PagedResult<ProductViewModel>
+            //4. Select and projection
+            var pagedResult = new PagedResult<ProductViewModel>()
             {
                 TotalRecord = totalRow,
-                Item = data
+                Items = data
             };
-
-            return pagedRusult;
+            return pagedResult;
         }
     }
 }

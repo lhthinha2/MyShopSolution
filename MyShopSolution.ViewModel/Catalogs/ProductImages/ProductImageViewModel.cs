@@ -16,7 +16,7 @@ namespace MyShopSolution.ViewModel.Catalogs.ProductImages
 
         public bool IsDefault { get; set; }
 
-        public DateTime DateCreate { get; set; }
+        public DateTime DateCreated { get; set; }
 
         public int SortOrder { get; set; }
 

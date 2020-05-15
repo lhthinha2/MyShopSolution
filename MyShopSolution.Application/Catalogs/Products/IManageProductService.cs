@@ -27,13 +27,14 @@ namespace MyShopSolution.Application.Catalogs.Products
 
         Task<ProductViewModel> GetById(int productId, string laguageId);
 
-        Task<int> AddImage(int productId, List<IFormFile> files);
-        
+        Task<int> AddImage(int productId, ProductImageCreateRequest request);
+
         Task<int> RemoveImage(int imageId);
 
-        Task<int> UpdateImage(int imageId, string caption, bool isDefault);
+        Task<int> UpdateImage(int imageId, ProductImageUpdateRequest request);
+
+        Task<ProductImageViewModel> GetImageById(int imageId);
 
         Task<List<ProductImageViewModel>> GetListImages(int productId);
-
     }
 }

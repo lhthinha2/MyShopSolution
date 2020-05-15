@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MyShopSolution.Data.Entities
 {
-    public class ProductImge
+    public class ProductImage
     {
         public int Id { get; set; }
 
@@ -16,7 +16,7 @@ namespace MyShopSolution.Data.Entities
 
         public bool IsDefault { get; set; }
 
-        public DateTime DateCreate { get; set; }
+        public DateTime DateCreated { get; set; }
 
         public int SortOrder { get; set; }
 

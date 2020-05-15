@@ -18,22 +18,23 @@ namespace MyShopSolution.BackendApi.Controllers
         private readonly IPublicProductService _publicProductService;
         private readonly IManageProductService _manageProductService;
 
-        public ProductsController(IPublicProductService publicProductService, IManageProductService manageProductService)
+        public ProductsController(IPublicProductService publicProductService,
+            IManageProductService manageProductService)
         {
             _publicProductService = publicProductService;
             _manageProductService = manageProductService;
         }
 
-        //http://Localhost:port/products?pageIndex=1&pageSize=10&categoryId=1
+        //http://localhost:port/products?pageIndex=1&pageSize=10&CategoryId=
         [HttpGet("{languageId}")]
-        public async Task<IActionResult> GetPaging(string languageId, [FromQuery]GetPublicProductPagingRequest request)
+        public async Task<IActionResult> GetAllPaging(string languageId, [FromQuery]GetPublicProductPagingRequest request)
         {
             var products = await _publicProductService.GetAllByCategoryId(languageId, request);
             return Ok(products);
         }
 
-        //http://Localhost:port/product/1
-        [HttpGet("{productId}/{languageId}languageId")]
+        //http://localhost:port/product/1
+        [HttpGet("{productId}/{languageId}")]
         public async Task<IActionResult> GetById(int productId, string languageId)
         {
             var product = await _manageProductService.GetById(productId, languageId);
@@ -49,7 +50,6 @@ namespace MyShopSolution.BackendApi.Controllers
             {
                 return BadRequest(ModelState);
             }
-
             var productId = await _manageProductService.Create(request);
             if (productId == 0)
                 return BadRequest();
@@ -59,7 +59,6 @@ namespace MyShopSolution.BackendApi.Controllers
             return CreatedAtAction(nameof(GetById), new { id = productId }, product);
         }
 
-
         [HttpPut]
         public async Task<IActionResult> Update([FromForm]ProductUpdateRequest request)
         {
@@ -67,7 +66,6 @@ namespace MyShopSolution.BackendApi.Controllers
             {
                 return BadRequest(ModelState);
             }
-
             var affectedResult = await _manageProductService.Update(request);
             if (affectedResult == 0)
                 return BadRequest();
@@ -86,9 +84,10 @@ namespace MyShopSolution.BackendApi.Controllers
         [HttpPatch("{productId}/{newPrice}")]
         public async Task<IActionResult> UpdatePrice(int productId, decimal newPrice)
         {
-            var IsSuccessful = await _manageProductService.UpdatePrice(productId, newPrice);
-            if (IsSuccessful)
+            var isSuccessful = await _manageProductService.UpdatePrice(productId, newPrice);
+            if (isSuccessful)
                 return Ok();
+
             return BadRequest();
         }
 
@@ -100,7 +99,6 @@ namespace MyShopSolution.BackendApi.Controllers
             {
                 return BadRequest(ModelState);
             }
-
             var imageId = await _manageProductService.AddImage(productId, request);
             if (imageId == 0)
                 return BadRequest();
@@ -117,7 +115,6 @@ namespace MyShopSolution.BackendApi.Controllers
             {
                 return BadRequest(ModelState);
             }
-
             var result = await _manageProductService.UpdateImage(imageId, request);
             if (result == 0)
                 return BadRequest();
@@ -125,15 +122,14 @@ namespace MyShopSolution.BackendApi.Controllers
             return Ok();
         }
 
-        [HttpDelete ("{productId}/images/{imageId}")]
-        public async Task<IActionResult> DeleteImage(int productId, [FromForm]ProductImageUpdateRequest request)
+        [HttpDelete("{productId}/images/{imageId}")]
+        public async Task<IActionResult> RemoveImage(int imageId)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            var result = await _manageProductService.UpdateImage(productId, request);
+            var result = await _manageProductService.RemoveImage(imageId);
             if (result == 0)
                 return BadRequest();
 

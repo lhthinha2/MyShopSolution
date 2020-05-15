@@ -7,9 +7,9 @@ using System.Text;
 
 namespace MyShopSolution.Data.Configurations
 {
-    public class ProductImageConfiguration : IEntityTypeConfiguration<ProductImge>
+    public class ProductImageConfiguration : IEntityTypeConfiguration<ProductImage>
     {
-        public void Configure(EntityTypeBuilder<ProductImge> builder)
+        public void Configure(EntityTypeBuilder<ProductImage> builder)
         {
             builder.ToTable("ProductImages");
 
@@ -21,7 +21,7 @@ namespace MyShopSolution.Data.Configurations
 
             builder.Property(x => x.Caption).HasMaxLength(200);
 
-            builder.HasOne(x => x.Product).WithMany(x => x.ProductImges).HasForeignKey(x => x.ProductId);
+            builder.HasOne(x => x.Product).WithMany(x => x.ProductImages).HasForeignKey(x => x.ProductId);
 
         }
     }
