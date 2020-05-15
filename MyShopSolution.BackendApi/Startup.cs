@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using MyShopSolution.Application.Catalogs.Products;
+using MyShopSolution.Application.Common;
 using MyShopSolution.Data.EF;
 using MyShopSolution.Utilities.Constants;
 
@@ -33,6 +34,9 @@ namespace MyShopSolution.BackendApi
 
             //Declare DI
             services.AddTransient<IPublicProductService, PublicProductService>();
+            services.AddTransient<IManageProductService, ManageProductService>();
+            services.AddTransient<IStorageService, FileStorageService>();
+
             services.AddControllersWithViews();
 
             // Register the Swagger generator, defining 1 or more Swagger documents
