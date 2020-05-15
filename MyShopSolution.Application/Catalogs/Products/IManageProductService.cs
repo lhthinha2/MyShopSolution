@@ -33,6 +33,5 @@ namespace MyShopSolution.Application.Catalogs.Products
         Task<int> UpdateImage(int imageId, string caption, bool isDefault);
 
         Task<List<ProductImageViewModel>> GetListImages(int productId);
-        s
     }
 }
