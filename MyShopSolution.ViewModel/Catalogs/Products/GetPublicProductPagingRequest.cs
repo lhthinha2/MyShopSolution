@@ -10,3 +10,4 @@ namespace MyShopSolution.ViewModel.Catalogs.Products
         public int? CategoryId { get; set; }
     }
 }
+    

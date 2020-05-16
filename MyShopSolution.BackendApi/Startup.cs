@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +13,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using MyShopSolution.Application.Catalogs.Products;
 using MyShopSolution.Application.Common;
+using MyShopSolution.Application.System.Users;
 using MyShopSolution.Data.EF;
+using MyShopSolution.Data.Entities;
 using MyShopSolution.Utilities.Constants;
 
 namespace MyShopSolution.BackendApi
@@ -31,11 +34,18 @@ namespace MyShopSolution.BackendApi
         {
             services.AddDbContext<MyShopDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString(SystemConstants.MainConnectionString)));
+            services.AddIdentity<AppUser, AppRole>()
+                .AddEntityFrameworkStores<MyShopDbContext>()
+                .AddDefaultTokenProviders();
 
             //Declare DI
             services.AddTransient<IPublicProductService, PublicProductService>();
             services.AddTransient<IManageProductService, ManageProductService>();
             services.AddTransient<IStorageService, FileStorageService>();
+            services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
+            services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();
+            services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();
+            services.AddTransient<IUserService, UserService>();
 
             services.AddControllersWithViews();
 
