@@ -4,6 +4,8 @@ using System.Data;
 using System.Linq;
 using System.Security.Cryptography.Xml;
 using System.Threading.Tasks;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -21,6 +23,7 @@ using MyShopSolution.Application.System.Users;
 using MyShopSolution.Data.EF;
 using MyShopSolution.Data.Entities;
 using MyShopSolution.Utilities.Constants;
+using MyShopSolution.ViewModel.System.Users;
 
 namespace MyShopSolution.BackendApi
 {
@@ -38,6 +41,7 @@ namespace MyShopSolution.BackendApi
         {
             services.AddDbContext<MyShopDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString(SystemConstants.MainConnectionString)));
+
             services.AddIdentity<AppUser, AppRole>()
                 .AddEntityFrameworkStores<MyShopDbContext>()
                 .AddDefaultTokenProviders();
@@ -51,7 +55,11 @@ namespace MyShopSolution.BackendApi
             services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();
             services.AddTransient<IUserService, UserService>();
 
-            services.AddControllers();
+            //services.AddTransient<IValidator<LoginRequest>, LoginRequestValidator>();
+            //services.AddTransient<IValidator<RegisterRequest>, RegisterRequestValidator>();
+
+            services.AddControllers()
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
 
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
