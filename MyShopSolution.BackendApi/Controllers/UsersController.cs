@@ -31,7 +31,7 @@ namespace MyShopSolution.BackendApi.Controllers
             var resultToken = await _userService.Authencate(request);
             if (string.IsNullOrEmpty(resultToken))
                 return BadRequest("Username or password is incorrect.");
-            return Ok(new { token = resultToken });
+            return Ok(resultToken);
         }
 
         [HttpPost("register")]
@@ -41,7 +41,7 @@ namespace MyShopSolution.BackendApi.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var result= await _userService.Register(request);
+            var result = await _userService.Register(request);
             if (!result)
                 return BadRequest("Register is unsuccessful.");
             return Ok();
