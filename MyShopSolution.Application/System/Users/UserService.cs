@@ -37,7 +37,7 @@ namespace MyShopSolution.Application.System.Users
             if (user == null)
                 return null;
 
-            var result = await _signInManager.PasswordSignInAsync(user, request.Password, request.RemeberMe, true);
+            var result = await _signInManager.PasswordSignInAsync(user, request.Password, request.RemenberMe, true);
             if (!result.Succeeded)
                 return null;
 

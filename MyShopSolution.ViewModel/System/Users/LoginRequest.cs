@@ -11,6 +11,6 @@ namespace MyShopSolution.ViewModel.System.Users
 
         public string Password { get; set; }
 
-        public bool RemeberMe { get; set; }
+        public bool RemenberMe { get; set; }
     }
 }
