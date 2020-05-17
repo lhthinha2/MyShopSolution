@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MyShopSolution.ViewModel.Common
 {
-    public class PagingRequestBase
+    public class PagingRequestBase : RequestBase
     {
         public int PageIndex { get; set; }
 
