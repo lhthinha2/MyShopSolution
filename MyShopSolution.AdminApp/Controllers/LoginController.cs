@@ -17,60 +17,46 @@ using MyShopSolution.ViewModel.System.Users;
 
 namespace MyShopSolution.AdminApp.Controllers
 {
-    public class UserController : BaseController
+    public class LoginController : Controller
     {
         private readonly IUserApiClient _userApiClient;
         private readonly IConfiguration _configuration;
 
-        public UserController(IUserApiClient userApiClient, IConfiguration configuration)
+        public LoginController(IUserApiClient userApiClient, IConfiguration configuration)
         {
             _userApiClient = userApiClient;
             _configuration = configuration;
         }
 
-        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 10)
-        {
-            var session = HttpContext.Session.GetString("Token");
-            var request = new GetUserPagingRequest()
-            {
-                BearerToken = session,
-                Keyword = keyword,
-                PageIndex = pageIndex,
-                PageSize = pageSize
-            };
-
-            var data = await _userApiClient.GetUserPagings(request);
-            return View(data);
-        }
-
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Index()
         {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(RegisterRequest request)
+        public async Task<IActionResult> Index(LoginRequest request)
         {
             if (!ModelState.IsValid)
+                return View(ModelState);
+
+            var token = await _userApiClient.Authencate(request);
+            var userPrincipal = this.ValidateToken(token);
+            var authProperties = new AuthenticationProperties
             {
-                return View(); 
-            }
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(1),
+                IsPersistent = true
+            };
 
-            var result = await _userApiClient.Register(request);
+            HttpContext.Session.SetString("Token", token);
 
-            if (result)
-                return RedirectToAction("Index");
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                userPrincipal,
+                authProperties);
 
-            return View(request);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Logout()
-        {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            HttpContext.Session.Remove("Token");
-            return RedirectToAction("Login", "User");
+            return RedirectToAction("Index", "Home");
         }
 
         private ClaimsPrincipal ValidateToken(string jwtToken)

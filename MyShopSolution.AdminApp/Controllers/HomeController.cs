@@ -11,7 +11,7 @@ using MyShopSolution.AdminApp.Models;
 namespace MyShopSolution.AdminApp.Controllers
 {
     [Authorize]
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;
 
