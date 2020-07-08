@@ -10,7 +10,6 @@ using MyShopSolution.AdminApp.Models;
 
 namespace MyShopSolution.AdminApp.Controllers
 {
-    [Authorize]
     public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;

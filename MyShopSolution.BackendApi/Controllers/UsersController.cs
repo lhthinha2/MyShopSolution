@@ -29,15 +29,15 @@ namespace MyShopSolution.BackendApi.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var resultToken = await _userService.Authencate(request);
+            var result = await _userService.Authenticate(request);
 
-            if (string.IsNullOrEmpty(resultToken))
-                return BadRequest("Username or password is incorrect.");
+            if (string.IsNullOrEmpty(result.ResultObj))
+                return BadRequest(result);
 
-            return Ok(resultToken);
+            return Ok(result);
         }
 
-        [HttpPost("register")]
+        [HttpPost()]
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody]RegisterRequest request)
         {
@@ -45,15 +45,37 @@ namespace MyShopSolution.BackendApi.Controllers
                 return BadRequest(ModelState);
 
             var result = await _userService.Register(request);
-            if (!result)
-                return BadRequest("Register is unsuccessful.");
-            return Ok();
+            if (!result.IsSuccessed)
+                return BadRequest(result);
+            return Ok(result);
         }
+
+        //PUT: https://localhost/api/users/id
+        [HttpPut("{id}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Update(Guid id, [FromBody]UserUpdateRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _userService.Update(id, request);
+            if (!result.IsSuccessed)
+                return BadRequest(result);
+            return Ok(result);
+        }
+
         //https://localhost/api/users/paging?pageIndex=1&pageSize=10&keyword=
         [HttpGet("paging")]
         public async Task<IActionResult> GetAllPaging([FromQuery]GetUserPagingRequest request)
         {
             var users = await _userService.GetUserPaging(request);
+            return Ok(users);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var users = await _userService.GetById(id);
             return Ok(users);
         }
     }

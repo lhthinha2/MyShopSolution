@@ -6,8 +6,11 @@ using System.Text;
 
 namespace MyShopSolution.ViewModel.System.Users
 {
-    public class RegisterRequest
+    public class UserUpdateRequest
     {
+        [DisplayName("Id")]
+        public Guid Id { get; set; }
+
         [DisplayName("Họ")]
         public string FirstName { get; set; }
 
@@ -23,14 +26,5 @@ namespace MyShopSolution.ViewModel.System.Users
 
         [DisplayName("Số điện thoại")]
         public string PhoneNumber { get; set; }
-
-        [DisplayName("Tài khoản")]
-        public string UserName { get; set; }
-
-        [DisplayName("Mật khẩu")]
-        public string Password { get; set; }
-
-        [DisplayName("Xác nhận mật khẩu")]
-        public string ConfirmPassword { get; set; }
     }
 }
